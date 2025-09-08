@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>egConvert — File Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg">
+                <a class="navbar-brand" href="javascript:void(0)">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i class="fas fa-sync-alt"></i>
+                        </div>
+                        <span class="logo-text">egConvert</span>
+                    </div>
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button"
+                                data-bs-toggle="dropdown">
+                                Convert
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="javascript:void(0)">Document Converter</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Image Converter</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Video Converter</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Audio Converter</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Archive Converter</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="javascript:void(0)" role="button"
+                                data-bs-toggle="dropdown">
+                                Compress
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="javascript:void(0)">Compress PDF</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Compress Image</a></li>
+                                <li><a class="dropdown-item" href="javascript:void(0)">Compress Video</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)">API</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)">Pricing</a>
+                        </li>
+                    </ul>
+
+                    <div class="navbar-nav">
+                        <a class="nav-link" href="javascript:void(0)">Sign In</a>
+                        <a class="btn btn-primary" href="javascript:void(0)">Sign Up</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <h1 class="hero-title">Image Converter</h1>
+                        <p class="hero-subtitle">
+                            <strong>egConvert</strong> is an online free file converter. We support nearly all audio, video,
+                            document, ebook, archive, image, spreadsheet, and presentation formats. To get started, use
+                            the button below and select files to convert from your computer.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Converter Widget -->
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="converter-widget">
+                            <!-- Step 1: Choose Files -->
+                            <div id="upload-step" class="converter-step active">
+                                <div class="upload-area" id="upload-area">
+                                    <div class="upload-content">
+                                        <div class="upload-icon">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                        </div>
+                                        <h3>Choose Files</h3>
+                                        <p>Drag and drop files here! or click on</p>
+                                        <button class="btn btn-choose-files" id="select-files-btn">
+                                            <i class="fas fa-folder-open me-2"></i>Choose Files
+                                        </button>
+                                        <input type="file" id="file-input" multiple style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 2: Convert -->
+                            <div id="convert-step" class="converter-step">
+                                <div class="files-section">
+                                    <div class="files-header">
+                                        <h4>Files</h4>
+                                        <button class="btn btn-add-more" id="add-more-btn">
+                                            <i class="fas fa-plus me-2"></i>Add more files
+                                        </button>
+                                    </div>
+                                    <div class="files-list" id="files-list"></div>
+                                </div>
+
+                                <div class="conversion-section">
+                                    <div class="conversion-bar">
+                                        <div class="format-selectors">
+                                            <div class="format-selector">
+                                                <select class="form-select" id="from-format">
+                                                    <option value="">from</option>
+                                                </select>
+                                            </div>
+                                            <div class="conversion-arrow">
+                                                <i class="fas fa-arrow-right"></i>
+                                            </div>
+                                            <div class="format-selector">
+                                                <select class="form-select" id="to-format">
+                                                    <option value="">to</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <button class="btn btn-convert" id="convert-btn" disabled>
+                                            Convert
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Step 3: Download -->
+                            <div id="download-step" class="converter-step">
+                                <div class="download-header">
+                                    <div class="success-icon">
+                                        <i class="fas fa-check-circle"></i>
+                                    </div>
+                                    <h3>Your files have been converted!</h3>
+                                    <p>Converted and ready to download</p>
+                                </div>
+
+                                <div class="download-section">
+                                    <div class="download-list" id="download-list"></div>
+
+                                    <div class="download-actions">
+                                        <button class="btn btn-download-all" id="download-all-btn">
+                                            <i class="fas fa-download me-2"></i>Download All
+                                        </button>
+                                        <button class="btn btn-convert-more" id="convert-more-btn">
+                                            Convert More Files
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-12">
+                        <h2 class="section-title">Why choose egConvert?</h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-cloud"></i>
+                            </div>
+                            <h5>In the cloud</h5>
+                            <p>All conversions are performed in the cloud and don't use any resources of your computer.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h5>Security</h5>
+                            <p>We delete uploaded files after 24 hours and converted ones after 1 hour. Nobody has
+                                access to your files.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h5>All platforms</h5>
+                            <p>egConvert works in a web browser and supports all platforms. There's no need to download
+                                and install any software.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Formats Section -->
+        <section class="formats-section">
+            <div class="container">
+                <div class="row text-center mb-5">
+                    <div class="col-12">
+                        <h2 class="section-title">We support 25,600+ different conversions</h2>
+                        <p class="section-subtitle">between 300+ different file formats</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="format-category">
+                            <div class="format-icon">
+                                <i class="fas fa-file-image"></i>
+                            </div>
+                            <h6>Image</h6>
+                            <div class="format-tags">
+                                <span class="format-tag">JPG</span>
+                                <span class="format-tag">PNG</span>
+                                <span class="format-tag">GIF</span>
+                                <span class="format-tag">BMP</span>
+                                <span class="format-tag">TIFF</span>
+                                <span class="format-tag">SVG</span>
+                                <span class="format-tag">WEBP</span>
+                                <span class="format-tag">ICO</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="format-category">
+                            <div class="format-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <h6>Document</h6>
+                            <div class="format-tags">
+                                <span class="format-tag">PDF</span>
+                                <span class="format-tag">DOC</span>
+                                <span class="format-tag">DOCX</span>
+                                <span class="format-tag">XLS</span>
+                                <span class="format-tag">XLSX</span>
+                                <span class="format-tag">PPT</span>
+                                <span class="format-tag">PPTX</span>
+                                <span class="format-tag">TXT</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="format-category">
+                            <div class="format-icon">
+                                <i class="fas fa-file-video"></i>
+                            </div>
+                            <h6>Video</h6>
+                            <div class="format-tags">
+                                <span class="format-tag">MP4</span>
+                                <span class="format-tag">AVI</span>
+                                <span class="format-tag">MOV</span>
+                                <span class="format-tag">WMV</span>
+                                <span class="format-tag">FLV</span>
+                                <span class="format-tag">MKV</span>
+                                <span class="format-tag">WEBM</span>
+                                <span class="format-tag">M4V</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="format-category">
+                            <div class="format-icon">
+                                <i class="fas fa-file-audio"></i>
+                            </div>
+                            <h6>Audio</h6>
+                            <div class="format-tags">
+                                <span class="format-tag">MP3</span>
+                                <span class="format-tag">WAV</span>
+                                <span class="format-tag">FLAC</span>
+                                <span class="format-tag">AAC</span>
+                                <span class="format-tag">OGG</span>
+                                <span class="format-tag">M4A</span>
+                                <span class="format-tag">WMA</span>
+                                <span class="format-tag">AIFF</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6>Convert</h6>
+                    <ul class="footer-links">
+                        <li><a href="javascript:void(0)">Archive Converter</a></li>
+                        <li><a href="javascript:void(0)">Audio Converter</a></li>
+                        <li><a href="javascript:void(0)">CAD Converter</a></li>
+                        <li><a href="javascript:void(0)">Document Converter</a></li>
+                        <li><a href="javascript:void(0)">Ebook Converter</a></li>
+                        <li><a href="javascript:void(0)">Hash Generator</a></li>
+                        <li><a href="javascript:void(0)">Image Converter</a></li>
+                        <li><a href="javascript:void(0)">Video Converter</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6>Compress</h6>
+                    <ul class="footer-links">
+                        <li><a href="javascript:void(0)">Compress PDF</a></li>
+                        <li><a href="javascript:void(0)">Compress Image</a></li>
+                        <li><a href="javascript:void(0)">Compress Video</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6>Company</h6>
+                    <ul class="footer-links">
+                        <li><a href="javascript:void(0)">About</a></li>
+                        <li><a href="javascript:void(0)">Privacy Policy</a></li>
+                        <li><a href="javascript:void(0)">Terms of Service</a></li>
+                        <li><a href="javascript:void(0)">Contact</a></li>
+                        <li><a href="javascript:void(0)">API</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6>Follow us</h6>
+                    <div class="social-links">
+                        <a href="javascript:void(0)" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="javascript:void(0)" class="social-link">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <hr class="footer-divider">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <p class="footer-copyright">© 2024 egConvert. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="formats.js"></script>
+    <script src="converter.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
