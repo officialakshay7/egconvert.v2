@@ -43,13 +43,13 @@ class ConvertioApp {
         // Format selectors
         const fromFormatSelect = document.getElementById('from-format');
         const toFormatSelect = document.getElementById('to-format');
-
+        
         fromFormatSelect.addEventListener('change', (e) => {
             this.selectedFromFormat = e.target.value;
             this.updateToFormatOptions();
             this.updateConvertButton();
         });
-
+        
         toFormatSelect.addEventListener('change', (e) => {
             this.selectedToFormat = e.target.value;
             this.updateConvertButton();
@@ -62,7 +62,7 @@ class ConvertioApp {
         // Download buttons
         const downloadAllBtn = document.getElementById('download-all-btn');
         const convertMoreBtn = document.getElementById('convert-more-btn');
-
+        
         downloadAllBtn.addEventListener('click', () => this.downloadAll());
         convertMoreBtn.addEventListener('click', () => this.resetConverter());
 
@@ -103,7 +103,7 @@ class ConvertioApp {
         this.preventDefaults(e);
         this.dragCounter = 0;
         e.currentTarget.classList.remove('dragover');
-
+        
         const files = e.dataTransfer.files;
         if (files.length > 0) {
             this.addFiles(files);
@@ -147,9 +147,9 @@ class ConvertioApp {
     updateFilesList() {
         const filesList = document.getElementById('files-list');
         const files = this.converter.getFiles();
-
+        
         filesList.innerHTML = '';
-
+        
         files.forEach(file => {
             const fileItem = this.createFileItem(file);
             filesList.appendChild(fileItem);
@@ -160,10 +160,10 @@ class ConvertioApp {
         const div = document.createElement('div');
         div.className = 'file-item';
         div.setAttribute('data-file-id', file.id);
-
-        const statusClass = file.status === 'error' ? 'text-danger' :
-            file.status === 'completed' ? 'text-success' :
-                file.status === 'converting' ? 'text-primary' : '';
+        
+        const statusClass = file.status === 'error' ? 'text-danger' : 
+                           file.status === 'completed' ? 'text-success' : 
+                           file.status === 'converting' ? 'text-primary' : '';
 
         div.innerHTML = `
             <div class="file-icon" style="color: ${getCategoryColor(file.formatInfo.category)}">
@@ -189,11 +189,11 @@ class ConvertioApp {
                 </button>
             </div>
         `;
-
+        
         if (file.status === 'converting') {
             div.classList.add('converting');
         }
-
+        
         return div;
     }
 
@@ -205,7 +205,7 @@ class ConvertioApp {
 
         this.converter.removeFile(fileId);
         this.updateFilesList();
-
+        
         if (this.converter.getFiles().length === 0) {
             this.showStep('upload');
             this.resetSelectors();
@@ -218,10 +218,10 @@ class ConvertioApp {
         const files = this.converter.getFiles();
         const fromFormatSelect = document.getElementById('from-format');
         const toFormatSelect = document.getElementById('to-format');
-
+        
         // Get all unique formats from uploaded files
         const uploadedFormats = [...new Set(files.map(f => f.extension))];
-
+        
         // Update "from" selector
         fromFormatSelect.innerHTML = '<option value="">from</option>';
         uploadedFormats.forEach(format => {
@@ -244,14 +244,14 @@ class ConvertioApp {
     updateToFormatOptions() {
         const toFormatSelect = document.getElementById('to-format');
         const files = this.converter.getFiles();
-
+        
         toFormatSelect.innerHTML = '<option value="">to</option>';
-
+        
         if (files.length === 0) return;
 
         // Get target formats based on selected from format or all uploaded formats
         let availableFormats = new Set();
-
+        
         if (this.selectedFromFormat) {
             // Show formats for selected source format
             getAvailableFormats(this.selectedFromFormat).forEach(format => {
@@ -282,12 +282,12 @@ class ConvertioApp {
 
         // Add options grouped by category
         const categoryOrder = ['image', 'document', 'video', 'audio', 'archive', 'ebook', 'cad'];
-
+        
         categoryOrder.forEach(category => {
             if (formatsByCategory[category] && formatsByCategory[category].length > 0) {
                 const optgroup = document.createElement('optgroup');
                 optgroup.label = category.charAt(0).toUpperCase() + category.slice(1);
-
+                
                 formatsByCategory[category]
                     .sort((a, b) => a.label.localeCompare(b.label))
                     .forEach(format => {
@@ -296,11 +296,11 @@ class ConvertioApp {
                         option.textContent = format.label;
                         optgroup.appendChild(option);
                     });
-
+                
                 toFormatSelect.appendChild(optgroup);
             }
         });
-
+        
         this.updateConvertButton();
     }
 
@@ -308,9 +308,9 @@ class ConvertioApp {
         const convertBtn = document.getElementById('convert-btn');
         const hasFiles = this.converter.getFiles().length > 0;
         const hasTargetFormat = this.selectedToFormat !== '';
-
+        
         convertBtn.disabled = !(hasFiles && hasTargetFormat) || this.converter.isConverting();
-
+        
         if (this.converter.isConverting()) {
             convertBtn.innerHTML = '<span class="spinner me-2"></span>Converting...';
         } else {
@@ -332,19 +332,19 @@ class ConvertioApp {
 
         // Update UI to show conversion in progress
         this.updateConvertButton();
-
+        
         try {
             await this.converter.convertFiles(
                 this.selectedToFormat,
                 (file, current, total) => this.updateConversionProgress(file, current, total),
                 (convertedFile) => this.onFileConverted(convertedFile)
             );
-
+            
             // Show download section after conversion completes
             setTimeout(() => {
                 this.showDownloadSection();
             }, 500);
-
+            
         } catch (error) {
             console.error('Conversion failed:', error);
             this.showError('Conversion failed. Please try again.');
@@ -358,7 +358,7 @@ class ConvertioApp {
         if (fileItem) {
             const fileDetails = fileItem.querySelector('.file-details');
             const progressBar = fileItem.querySelector('.progress-bar');
-
+            
             if (file.status === 'converting') {
                 fileItem.classList.add('converting');
                 if (progressBar) {
@@ -382,7 +382,7 @@ class ConvertioApp {
                 }
             }
         }
-
+        
         // Update convert button
         this.updateConvertButton();
     }
@@ -393,17 +393,17 @@ class ConvertioApp {
 
     showDownloadSection() {
         this.showStep('download');
-
+        
         const downloadList = document.getElementById('download-list');
         const convertedFiles = this.converter.getConvertedFiles();
-
+        
         downloadList.innerHTML = '';
-
+        
         if (convertedFiles.length === 0) {
             downloadList.innerHTML = '<p class="text-muted text-center">No files were successfully converted.</p>';
             return;
         }
-
+        
         convertedFiles.forEach(file => {
             const downloadItem = this.createDownloadItem(file);
             downloadList.appendChild(downloadItem);
@@ -413,9 +413,9 @@ class ConvertioApp {
     createDownloadItem(file) {
         const div = document.createElement('div');
         div.className = 'download-item';
-
+        
         const targetFormatInfo = getFormatInfo(file.targetFormat);
-
+        
         div.innerHTML = `
             <div class="download-info">
                 <div class="download-icon">
@@ -432,7 +432,7 @@ class ConvertioApp {
                 <i class="fas fa-download me-2"></i>Download
             </button>
         `;
-
+        
         return div;
     }
 
@@ -443,10 +443,10 @@ class ConvertioApp {
     async downloadAll() {
         const downloadAllBtn = document.getElementById('download-all-btn');
         const originalText = downloadAllBtn.innerHTML;
-
+        
         downloadAllBtn.innerHTML = '<span class="spinner me-2"></span>Downloading...';
         downloadAllBtn.disabled = true;
-
+        
         try {
             await this.converter.downloadAllFiles();
         } catch (error) {
@@ -464,7 +464,7 @@ class ConvertioApp {
         this.selectedFromFormat = '';
         this.showStep('upload');
         this.resetSelectors();
-
+        
         // Reset form elements
         document.getElementById('file-input').value = '';
     }
@@ -484,13 +484,13 @@ class ConvertioApp {
                 stepElement.classList.remove('active');
             }
         });
-
+        
         // Show target step
         const targetStep = document.getElementById(`${step}-step`);
         if (targetStep) {
             targetStep.classList.add('active');
         }
-
+        
         this.currentStep = step;
     }
 
@@ -503,9 +503,9 @@ class ConvertioApp {
             ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         `;
-
+        
         document.body.appendChild(alertDiv);
-
+        
         // Auto-remove after 5 seconds
         setTimeout(() => {
             if (alertDiv.parentNode) {
@@ -523,9 +523,9 @@ class ConvertioApp {
             ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         `;
-
+        
         document.body.appendChild(alertDiv);
-
+        
         // Auto-remove after 3 seconds
         setTimeout(() => {
             if (alertDiv.parentNode) {
@@ -539,7 +539,7 @@ class ConvertioApp {
 let app;
 document.addEventListener('DOMContentLoaded', () => {
     app = new ConvertioApp();
-
+    
     // Add some demo functionality
     console.log('Convertio clone loaded successfully!');
     console.log('Supported formats:', Object.keys(SUPPORTED_FORMATS).length);
@@ -558,7 +558,7 @@ document.addEventListener('click', (e) => {
         e.preventDefault();
         const targetId = e.target.getAttribute('href');
         const targetElement = document.querySelector(targetId);
-
+        
         if (targetElement) {
             targetElement.scrollIntoView({
                 behavior: 'smooth',
@@ -577,7 +577,7 @@ document.addEventListener('keydown', (e) => {
             document.getElementById('file-input').click();
         }
     }
-
+    
     // Escape to reset converter
     if (e.key === 'Escape' && !app.converter.isConverting()) {
         if (app.currentStep === 'download') {
